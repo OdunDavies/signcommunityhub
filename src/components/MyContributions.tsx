@@ -50,7 +50,7 @@ const MyContributions = () => {
               </div>
               <p className="text-crypto-purple mb-3">@emlord_01</p>
               <p className="text-muted-foreground">
-              web3|| Creating something iconic 🌵 || Thread writer 🧵|| Video Editor 📸🎥 || CM /MOD https://bit.ly/token_collab || Valar moghulis || Web3 || Seeing SIGNS🧡
+              web3|| Creating something iconic 🌵 || Thread writer 🧵|| Video Editor 📸🎥 || CM /MOD https://bit.ly/token_collab || Valar moghulis || Web3 || Seeing SIGNS🧡 
               </p>
             </div>
           </div>
