@@ -1,8 +1,38 @@
-import React from 'react';
-import { ExternalLink, Play } from 'lucide-react';
+import React, { useState } from 'react';
+import { ExternalLink, Play, X } from 'lucide-react';
 import ClickableImage from './ClickableImage';
 
+interface MediaOverlayProps {
+  src: string;
+  isVideo?: boolean;
+  onClose: () => void;
+}
+
+const MediaOverlay: React.FC<MediaOverlayProps> = ({ src, isVideo, onClose }) => {
+  return (
+    <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+      <button 
+        onClick={onClose}
+        className="absolute top-4 right-4 text-white hover:text-gray-300"
+      >
+        <X size={24} />
+      </button>
+      <div className="max-w-4xl w-full max-h-[90vh]">
+        {isVideo ? (
+          <video controls className="w-full h-full">
+            <source src={src} type="video/mp4" />
+          </video>
+        ) : (
+          <img src={src} alt="Enlarged view" className="w-full h-full object-contain" />
+        )}
+      </div>
+    </div>
+  );
+};
+
 const CreatorsSection = () => {
+  const [selectedMedia, setSelectedMedia] = useState<{ src: string; isVideo?: boolean } | null>(null);
+
   const creators = [
     {
       username: 'ashu__arts',
@@ -23,8 +53,8 @@ const CreatorsSection = () => {
       avatar: 'https://unavatar.io/twitter/robertlazy23',
       url: 'https://x.com/robertlazy23?s=21',
       artworks: [
-        '/lovable-uploads/5676b947-5bca-423d-bb30-4761827d91fd.png',
-        '/lovable-uploads/cc176306-f6a4-47ad-9b13-3e06cc9b51eb.png'
+        '/lovable-uploads/cc176306-f6a4-47ad-9b13-3e06cc9b51eb.png',
+        '/lovable-uploads/robert3.png'
       ]
     },
     {
@@ -41,14 +71,6 @@ const CreatorsSection = () => {
       hasVideo: true
     },
     {
-      username: 'mubi_crypt',
-      displayName: 'SIGN Creator',
-      bio: 'Content creator & community educator | 500k+ TikTok | Daily SIGN tutorials & updates | Join my Discord for exclusive content',
-      avatar: 'https://unavatar.io/twitter/mubi_crypt',
-      url: 'https://x.com/mubi_crypt?s=21',
-      artworks: []
-    },
-    {
       username: '_biggids',
       displayName: 'Big Gids👨‍🍳',
       bio: 'Community Ecosystem Lead @sign | Founder @SignAcademyHQ | Founder/Host of #OnchainOrigins podcast.',
@@ -62,6 +84,14 @@ const CreatorsSection = () => {
 
   return (
     <div className="space-y-8">
+      {selectedMedia && (
+        <MediaOverlay 
+          src={selectedMedia.src}
+          isVideo={selectedMedia.isVideo}
+          onClose={() => setSelectedMedia(null)}
+        />
+      )}
+      
       <h2 className="text-3xl font-bold crypto-gradient bg-clip-text text-transparent text-center">
         Featured Creators
       </h2>
@@ -86,8 +116,20 @@ const CreatorsSection = () => {
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className="font-bold text-lg">{creator.displayName}</h3>
-                  <ExternalLink size={16} className="text-crypto-purple" />
+                  <ExternalLink size={16} className="text-crypto-purple cursor-pointer" onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(creator.url, '_blank');
+                  }} />
                 </div>
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(creator.url, '_blank');
+                  }}
+                  className="px-4 py-1.5 bg-crypto-purple text-white rounded-full text-sm font-medium hover:bg-crypto-purple/80 transition-colors mb-2"
+                >
+                  Follow
+                </button>
                 <p className="text-crypto-purple text-sm mb-2">@{creator.username}</p>
                 <p className="text-muted-foreground text-sm">{creator.bio}</p>
               </div>
@@ -98,24 +140,29 @@ const CreatorsSection = () => {
               <div className="space-y-4">
                 <h4 className="font-semibold text-crypto-purple">Recent Works</h4>
                 <div className="grid grid-cols-2 gap-3">
-                  {creator.artworks.map((artwork, artIndex) => (
-                    <div key={artIndex} className="relative group overflow-hidden rounded-lg">
-                      <ClickableImage
-                        src={artwork}
-                        alt={`Artwork by ${creator.displayName}`}
-                        className="w-full h-32 object-cover transition-transform group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    </div>
-                  ))}
-                  {creator.hasVideo && (
-                    <div className="relative group overflow-hidden rounded-lg bg-gradient-to-br from-crypto-purple to-crypto-blue">
-                      <div className="w-full h-32 flex items-center justify-center">
-                        <Play size={32} className="text-white" />
+                  {creator.artworks.map((artwork, artIndex) => {
+                    const isVideo = artwork.endsWith('.mp4');
+                    return (
+                      <div 
+                        key={artIndex} 
+                        className="relative group overflow-hidden rounded-lg cursor-pointer"
+                        onClick={() => setSelectedMedia({ src: artwork, isVideo })}
+                      >
+                        {isVideo ? (
+                          <div className="w-full h-32 flex items-center justify-center bg-gradient-to-br from-crypto-purple to-crypto-blue">
+                            <Play size={32} className="text-white" />
+                          </div>
+                        ) : (
+                          <img
+                            src={artwork}
+                            alt={`Artwork by ${creator.displayName}`}
+                            className="w-full h-32 object-cover transition-transform group-hover:scale-110"
+                          />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       </div>
-                      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
-                    </div>
-                  )}
+                    );
+                  })}
                 </div>
               </div>
             )}

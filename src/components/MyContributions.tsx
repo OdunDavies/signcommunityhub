@@ -1,20 +1,58 @@
-import React from 'react';
-import { ExternalLink, Award, Users, Zap } from 'lucide-react';
+import React, { useState } from 'react';
+import { ExternalLink, Award, Users, Zap, X } from 'lucide-react';
 import ClickableImage from './ClickableImage';
 
+interface MediaOverlayProps {
+  src: string;
+  isVideo?: boolean;
+  onClose: () => void;
+}
+
+const MediaOverlay: React.FC<MediaOverlayProps> = ({ src, isVideo, onClose }) => {
+  return (
+    <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+      <button 
+        onClick={onClose}
+        className="absolute top-4 right-4 text-white hover:text-gray-300"
+      >
+        <X size={24} />
+      </button>
+      <div className="max-w-4xl w-full max-h-[90vh]">
+        {isVideo ? (
+          <video controls className="w-full h-full">
+            <source src={src} type="video/mp4" />
+          </video>
+        ) : (
+          <img src={src} alt="Enlarged view" className="w-full h-full object-contain" />
+        )}
+      </div>
+    </div>
+  );
+};
+
+interface Contribution {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}
+
 const MyContributions = () => {
-  const contributions = [
+  const [selectedMedia, setSelectedMedia] = useState<{ src: string; isVideo?: boolean } | null>(null);
+
+  const contributions: Contribution[] = [
     {
       icon: <Users className="w-6 h-6 text-crypto-blue" />,
+      title: "Community Building",
       description: "Built the SignCommunityHub, fostering collaboration and growth among members worldwide."
     },
     {
       icon: <Award className="w-6 h-6 text-crypto-green" />,
+      title: "Education",
       description: "Created educational content and resources to help newcomers understand and navigate the Sign ecosystem."
     },
     {
       icon: <Zap className="w-6 h-6 text-crypto-purple" />,
-    
+      title: "Technical Support",
       description: "Always help new users on the technical issues when joining the sign community."
     }
   ];
@@ -27,6 +65,14 @@ const MyContributions = () => {
 
   return (
     <div className="space-y-8">
+      {selectedMedia && (
+        <MediaOverlay 
+          src={selectedMedia.src}
+          isVideo={selectedMedia.isVideo}
+          onClose={() => setSelectedMedia(null)}
+        />
+      )}
+
       <h2 className="text-3xl font-bold crypto-gradient bg-clip-text text-transparent text-center">
         My Contributions
       </h2>
@@ -34,10 +80,7 @@ const MyContributions = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Profile Section */}
         <div className="crypto-card">
-          <div 
-            className="flex items-start gap-4 mb-6 cursor-pointer hover:opacity-80 transition-opacity"
-            onClick={() => window.open('https://x.com/emlord_01', '_blank')}
-          >
+          <div className="flex items-start gap-4 mb-6">
             <ClickableImage
               src="https://unavatar.io/twitter/emlord_01"
               alt="EmLord"
@@ -46,11 +89,17 @@ const MyContributions = () => {
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <h3 className="font-bold text-xl">EmLord</h3>
-                <ExternalLink size={18} className="text-crypto-purple" />
+                <ExternalLink size={18} className="text-crypto-purple cursor-pointer" onClick={() => window.open('https://x.com/emlord_01', '_blank')} />
               </div>
-              <p className="text-crypto-purple mb-3">@emlord_01</p>
-              <p className="text-muted-foreground">
-              web3|| Creating something iconic 🌵 || Thread writer 🧵|| Video Editor 📸🎥 || CM /MOD https://bit.ly/token_collab || Valar moghulis || Web3 || Seeing SIGNS🧡 
+              <p className="text-crypto-purple mb-2">@emlord_01</p>
+              <button 
+                onClick={() => window.open('https://x.com/emlord_01', '_blank')}
+                className="px-4 py-1.5 bg-crypto-purple text-white rounded-full text-sm font-medium hover:bg-crypto-purple/80 transition-colors"
+              >
+                Follow
+              </button>
+              <p className="text-muted-foreground mt-3">
+                web3|| Creating something iconic 🌵 || Thread writer 🧵|| Video Editor 📸🎥 || CM /MOD https://bit.ly/token_collab || Valar moghulis || Web3 || Seeing SIGNS🧡 
               </p>
             </div>
           </div>
@@ -75,8 +124,12 @@ const MyContributions = () => {
           <h4 className="font-semibold text-crypto-purple text-lg">Featured Works</h4>
           <div className="grid grid-cols-2 gap-4">
             {myArtworks.map((artwork, index) => (
-              <div key={index} className="relative group overflow-hidden rounded-lg">
-                <ClickableImage
+              <div 
+                key={index} 
+                className="relative group overflow-hidden rounded-lg cursor-pointer"
+                onClick={() => setSelectedMedia({ src: artwork })}
+              >
+                <img
                   src={artwork}
                   alt={`My contribution ${index + 1}`}
                   className="w-full h-40 object-cover transition-transform group-hover:scale-110"
@@ -89,8 +142,6 @@ const MyContributions = () => {
               </div>
             ))}
           </div>
-
-          
         </div>
       </div>
     </div>
