@@ -26,8 +26,8 @@ const Header = () => {
               SignCommunityHub
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-6 max-w-2xl">
-              Building the future of decentralized communities. Empowering creators, traders, and innovators in the crypto space through collaboration and cutting-edge technology.
-            </p>
+              If you're seeing this, it's a sign.
+              </p>
             
             {/* Social Links */}
             <div className="flex flex-wrap justify-center md:justify-start gap-4">

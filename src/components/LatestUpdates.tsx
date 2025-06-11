@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 
 const LatestUpdates = () => {
@@ -11,11 +10,22 @@ const LatestUpdates = () => {
     script.defer = true;
     document.head.appendChild(script);
 
-    // Cleanup function to remove the script when component unmounts
+    // Create and append the CoinGecko widget script
+    const coingeckoScript = document.createElement('script');
+    coingeckoScript.src = "https://widgets.coingecko.com/coingecko-coin-price-marquee-widget.js";
+    coingeckoScript.async = true;
+    document.head.appendChild(coingeckoScript);
+
+    // Cleanup function to remove scripts when component unmounts
     return () => {
-      const existingScript = document.querySelector('script[src="https://www.juicer.io/embed/sign/embed-code.js"]');
-      if (existingScript) {
-        document.head.removeChild(existingScript);
+      const existingJuicerScript = document.querySelector('script[src="https://www.juicer.io/embed/sign/embed-code.js"]');
+      const existingCoingeckoScript = document.querySelector('script[src="https://widgets.coingecko.com/coingecko-coin-price-marquee-widget.js"]');
+      
+      if (existingJuicerScript) {
+        document.head.removeChild(existingJuicerScript);
+      }
+      if (existingCoingeckoScript) {
+        document.head.removeChild(existingCoingeckoScript);
       }
     };
   }, []);
@@ -39,23 +49,31 @@ const LatestUpdates = () => {
         <h3 className="text-lg font-semibold mb-4 crypto-gradient bg-clip-text text-transparent">
           Live Crypto Prices
         </h3>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex justify-between items-center py-2">
-            <span className="font-medium">BTC</span>
-            <span className="text-crypto-green">$43,250</span>
-          </div>
-          <div className="flex justify-between items-center py-2">
-            <span className="font-medium">ETH</span>
-            <span className="text-crypto-green">$2,650</span>
-          </div>
-          <div className="flex justify-between items-center py-2">
-            <span className="font-medium">SOL</span>
-            <span className="text-crypto-green">$238</span>
-          </div>
-          <div className="flex justify-between items-center py-2">
-            <span className="font-medium">SIGN</span>
-            <span className="text-crypto-green">$0.045</span>
-          </div>
+        <div className="w-full overflow-hidden rounded-lg">
+          <div dangerouslySetInnerHTML={{
+            __html: `
+              <coingecko-coin-price-marquee-widget 
+                coin-ids="bitcoin,ethereum,solana,sign" 
+                currency="usd" 
+                background-color="#1a1b1f" 
+                locale="en" 
+                font-color="#ffffff">
+              </coingecko-coin-price-marquee-widget>
+            `
+          }} />
+        </div>
+        <div className="mt-4">
+          <div dangerouslySetInnerHTML={{
+            __html: `
+              <coingecko-coin-compare-chart-widget 
+                coin-ids="bitcoin,ethereum,solana,sign" 
+                currency="usd" 
+                locale="en"
+                background-color="#1a1b1f"
+                font-color="#ffffff">
+              </coingecko-coin-compare-chart-widget>
+            `
+          }} />
         </div>
       </div>
     </div>

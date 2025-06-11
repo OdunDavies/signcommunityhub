@@ -54,7 +54,7 @@ const CreatorsSection = () => {
       url: 'https://x.com/robertlazy23?s=21',
       artworks: [
         '/lovable-uploads/cc176306-f6a4-47ad-9b13-3e06cc9b51eb.png',
-        '/lovable-uploads/robert3.png'
+        '/lovable-uploads/robert3.jpg'
       ]
     },
     {
