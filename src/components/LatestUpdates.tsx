@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const LatestUpdates = () => {
+  const [isWidgetLoaded, setIsWidgetLoaded] = useState(false);
+
   useEffect(() => {
     // Create and append the Juicer script
     const script = document.createElement('script');
@@ -12,14 +14,15 @@ const LatestUpdates = () => {
 
     // Create and append the CoinGecko widget script
     const coingeckoScript = document.createElement('script');
-    coingeckoScript.src = "https://widgets.coingecko.com/coingecko-coin-price-marquee-widget.js";
+    coingeckoScript.src = "https://widgets.coingecko.com/coingecko-coin-ticker-widget.js";
     coingeckoScript.async = true;
+    coingeckoScript.onload = () => setIsWidgetLoaded(true);
     document.head.appendChild(coingeckoScript);
 
     // Cleanup function to remove scripts when component unmounts
     return () => {
       const existingJuicerScript = document.querySelector('script[src="https://www.juicer.io/embed/sign/embed-code.js"]');
-      const existingCoingeckoScript = document.querySelector('script[src="https://widgets.coingecko.com/coingecko-coin-price-marquee-widget.js"]');
+      const existingCoingeckoScript = document.querySelector('script[src="https://widgets.coingecko.com/coingecko-coin-ticker-widget.js"]');
       
       if (existingJuicerScript) {
         document.head.removeChild(existingJuicerScript);
@@ -49,29 +52,54 @@ const LatestUpdates = () => {
         <h3 className="text-lg font-semibold mb-4 crypto-gradient bg-clip-text text-transparent">
           Live Crypto Prices
         </h3>
-        <div className="w-full overflow-hidden rounded-lg">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {!isWidgetLoaded && (
+            <div className="col-span-full text-center py-4 text-muted-foreground">
+              Loading crypto prices...
+            </div>
+          )}
           <div dangerouslySetInnerHTML={{
             __html: `
-              <coingecko-coin-price-marquee-widget 
-                coin-ids="bitcoin,ethereum,solana,sign" 
-                currency="usd" 
-                background-color="#1a1b1f" 
-                locale="en" 
-                font-color="#ffffff">
-              </coingecko-coin-price-marquee-widget>
-            `
-          }} />
-        </div>
-        <div className="mt-4">
-          <div dangerouslySetInnerHTML={{
-            __html: `
-              <coingecko-coin-compare-chart-widget 
-                coin-ids="bitcoin,ethereum,solana,sign" 
+              <coingecko-coin-ticker-widget 
+                coin-id="bitcoin" 
                 currency="usd" 
                 locale="en"
                 background-color="#1a1b1f"
                 font-color="#ffffff">
-              </coingecko-coin-compare-chart-widget>
+              </coingecko-coin-ticker-widget>
+            `
+          }} />
+          <div dangerouslySetInnerHTML={{
+            __html: `
+              <coingecko-coin-ticker-widget 
+                coin-id="ethereum" 
+                currency="usd" 
+                locale="en"
+                background-color="#1a1b1f"
+                font-color="#ffffff">
+              </coingecko-coin-ticker-widget>
+            `
+          }} />
+          <div dangerouslySetInnerHTML={{
+            __html: `
+              <coingecko-coin-ticker-widget 
+                coin-id="solana" 
+                currency="usd" 
+                locale="en"
+                background-color="#1a1b1f"
+                font-color="#ffffff">
+              </coingecko-coin-ticker-widget>
+            `
+          }} />
+          <div dangerouslySetInnerHTML={{
+            __html: `
+              <coingecko-coin-ticker-widget 
+                coin-id="sign" 
+                currency="usd" 
+                locale="en"
+                background-color="#1a1b1f"
+                font-color="#ffffff">
+              </coingecko-coin-ticker-widget>
             `
           }} />
         </div>
