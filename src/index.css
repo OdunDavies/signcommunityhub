@@ -1,0 +1,190 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Sign Community Theme - Orange color scheme */
+
+@layer base {
+  :root {
+    --background: 224 24% 8%;
+    --foreground: 210 40% 98%;
+
+    --card: 224 24% 12%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 224 24% 12%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 25 95% 53%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 25 95% 53%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 25 95% 53%;
+
+    --radius: 0.75rem;
+
+    /* Custom Sign theme colors - Orange based */
+    --sign-orange: 25 95% 53%;
+    --sign-orange-light: 25 95% 63%;
+    --sign-orange-dark: 25 95% 43%;
+    --sign-accent: 217 91% 60%;
+    --sign-secondary: 316 73% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(224 24% 6%) 100%);
+    min-height: 100vh;
+  }
+
+  /* Custom Scrollbar */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--sign-orange)) transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, hsl(var(--sign-orange)), hsl(var(--sign-accent)));
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, hsl(var(--sign-accent)), hsl(var(--sign-orange)));
+  }
+
+  /* Line clamp utility */
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  .sign-gradient {
+    background: linear-gradient(135deg, hsl(var(--sign-orange)) 0%, hsl(var(--sign-orange-light)) 50%, hsl(var(--sign-accent)) 100%);
+  }
+  
+  .sign-card {
+    @apply bg-card/80 backdrop-blur-sm border border-border/50 rounded-lg p-6 hover:shadow-lg transition-all duration-300;
+    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(224 24% 14%) 100%);
+    box-shadow: 0 0 20px hsl(var(--sign-orange) / 0.1);
+  }
+
+  .sign-card:hover {
+    box-shadow: 0 0 30px hsl(var(--sign-orange) / 0.2);
+  }
+
+  .sign-button {
+    @apply bg-gradient-to-r text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105;
+    background: linear-gradient(135deg, hsl(var(--sign-orange)) 0%, hsl(var(--sign-orange-dark)) 100%);
+  }
+
+  .sign-button:hover {
+    background: linear-gradient(135deg, hsl(var(--sign-orange-light)) 0%, hsl(var(--sign-orange)) 100%);
+  }
+
+  .glow-effect {
+    box-shadow: 0 0 20px hsl(var(--sign-orange) / 0.3);
+  }
+
+  .profile-card {
+    @apply sign-card hover:scale-105 cursor-pointer;
+    transition: all 0.3s ease;
+  }
+
+  .profile-card:hover {
+    @apply glow-effect;
+  }
+
+  .creator-card {
+    @apply sign-card;
+    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(224 24% 16%) 100%);
+  }
+
+  /* Crypto/Sign specific classes for backwards compatibility */
+  .crypto-gradient {
+    @apply sign-gradient;
+  }
+
+  .crypto-card {
+    @apply sign-card;
+  }
+
+  .crypto-button {
+    @apply sign-button;
+  }
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px hsl(var(--sign-orange) / 0.3); }
+  50% { box-shadow: 0 0 30px hsl(var(--sign-orange) / 0.5); }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Responsive design utilities */
+@media (max-width: 768px) {
+  .mobile-stack {
+    @apply flex-col space-y-6;
+  }
+  
+  .mobile-full {
+    @apply w-full;
+  }
+
+  .sign-card {
+    @apply p-4;
+  }
+
+  .creator-card {
+    @apply p-4;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    @apply px-4;
+  }
+}
