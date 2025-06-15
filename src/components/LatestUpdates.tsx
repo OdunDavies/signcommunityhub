@@ -12,24 +12,23 @@ const LatestUpdates = () => {
     script.defer = true;
     document.head.appendChild(script);
 
-    // Create and append the TradingView widget script
-    const tradingViewScript = document.createElement('script');
-    tradingViewScript.src = "https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js";
-    tradingViewScript.type = "text/javascript";
-    tradingViewScript.async = true;
-    tradingViewScript.onload = () => setIsWidgetLoaded(true);
-    document.head.appendChild(tradingViewScript);
+    // Create and append the CoinGecko widget script
+    const coingeckoScript = document.createElement('script');
+    coingeckoScript.src = "https://widgets.coingecko.com/gecko-coin-list-widget.js";
+    coingeckoScript.async = true;
+    coingeckoScript.onload = () => setIsWidgetLoaded(true);
+    document.head.appendChild(coingeckoScript);
 
     // Cleanup function to remove scripts when component unmounts
     return () => {
       const existingJuicerScript = document.querySelector('script[src="https://www.juicer.io/embed/sign/embed-code.js"]');
-      const existingTradingViewScript = document.querySelector('script[src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js"]');
+      const existingCoingeckoScript = document.querySelector('script[src="https://widgets.coingecko.com/gecko-coin-list-widget.js"]');
       
       if (existingJuicerScript) {
         document.head.removeChild(existingJuicerScript);
       }
-      if (existingTradingViewScript) {
-        document.head.removeChild(existingTradingViewScript);
+      if (existingCoingeckoScript) {
+        document.head.removeChild(existingCoingeckoScript);
       }
     };
   }, []);
@@ -47,9 +46,9 @@ const LatestUpdates = () => {
         </h3>
         <div id="juicer-embed" className="juicer-feed" data-feed-id="sign"></div>
       </div>
-      
-      {/* Crypto Widget */}
-      <div className="crypto-card mt-8">
+
+      {/* Crypto Price Widget */}
+      <div className="crypto-card">
         <h3 className="text-lg font-semibold mb-4 crypto-gradient bg-clip-text text-transparent">
           Live Crypto Prices
         </h3>
@@ -60,8 +59,21 @@ const LatestUpdates = () => {
         )}
         <div dangerouslySetInnerHTML={{
           __html: `
-            <script src="https://widgets.coingecko.com/gecko-coin-list-widget.js"></script>
-            <gecko-coin-list-widget locale="en" dark-mode="true" outlined="true" coin-ids="sign-global,the-open-network,bitcoin,ethereum,tether,solana" initial-currency="usd"></gecko-coin-list-widget>
+            <gecko-coin-list-widget 
+              coin-ids="bitcoin,ethereum,bnb,the-open-network,sign-global"
+              currency="usd"
+              locale="en"
+              background-color="transparent"
+              text-color="#FFFFFF"
+              border-color="#6B46C1"
+              border-radius="8"
+              padding="16"
+              font-family="Inter"
+              font-size="14"
+              font-weight="500"
+              height="400"
+              width="100%"
+            ></gecko-coin-list-widget>
           `
         }} />
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ExternalLink, Play, X } from 'lucide-react';
 import ClickableImage from './ClickableImage';
 
@@ -32,6 +32,23 @@ const MediaOverlay: React.FC<MediaOverlayProps> = ({ src, isVideo, onClose }) =>
 
 const CreatorsSection = () => {
   const [selectedMedia, setSelectedMedia] = useState<{ src: string; isVideo?: boolean } | null>(null);
+  const [isTwitterScriptLoaded, setIsTwitterScriptLoaded] = useState(false);
+
+  useEffect(() => {
+    // Load Twitter widget script
+    const script = document.createElement('script');
+    script.src = 'https://platform.twitter.com/widgets.js';
+    script.async = true;
+    script.onload = () => setIsTwitterScriptLoaded(true);
+    document.body.appendChild(script);
+
+    return () => {
+      const existingScript = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
+      if (existingScript) {
+        document.body.removeChild(existingScript);
+      }
+    };
+  }, []);
 
   const creators = [
     {
@@ -88,9 +105,9 @@ const CreatorsSection = () => {
       url: 'https://x.com/lucky_of_web3?s=21',
       artworks: [],
       tweets: [
-        'https://x.com/lucky_of_web3/status/1922757287334064140?s=46',
+        'https://x.com/lucky_of_web3/status/1919384486115975373?s=46',
         'https://x.com/lucky_of_web3/status/1922245416722055623?s=46',
-        'https://x.com/lucky_of_web3/status/1919384486115975373?s=46'
+        'https://x.com/lucky_of_web3/status/1922757287334064140?s=46',
       ]
     },
     {
@@ -207,21 +224,29 @@ const CreatorsSection = () => {
               </div>
             )}
 
-            {/* Tweets (for lucky_of_web3) */}
-            {creator.username === 'lucky_of_web3' && creator.tweets && (
+            {/* Tweets Section */}
+            {creator.tweets && creator.tweets.length > 0 && (
               <div className="space-y-4 mt-4">
                 <h4 className="font-semibold text-crypto-purple">Featured Tweets</h4>
                 <div className="flex flex-col gap-4">
                   {creator.tweets.map((tweetUrl, tweetIdx) => (
                     <div key={tweetIdx} className="rounded-lg overflow-hidden border border-crypto-purple/20 bg-white dark:bg-black/30 shadow">
-                      <div dangerouslySetInnerHTML={{
-                        __html: `
-                          <blockquote class="twitter-tweet" data-lang="en">
-                            <a href="${tweetUrl}"></a>
-                          </blockquote>
-                          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-                        `
-                      }} />
+                      <div className="p-4">
+                        <a 
+                          href={tweetUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="block hover:opacity-80 transition-opacity"
+                        >
+                          <div dangerouslySetInnerHTML={{
+                            __html: `
+                              <blockquote class="twitter-tweet" data-lang="en">
+                                <a href="${tweetUrl}"></a>
+                              </blockquote>
+                            `
+                          }} />
+                        </a>
+                      </div>
                     </div>
                   ))}
                 </div>
