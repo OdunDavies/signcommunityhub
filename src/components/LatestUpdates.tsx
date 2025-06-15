@@ -58,69 +58,12 @@ const LatestUpdates = () => {
             Loading crypto prices...
           </div>
         )}
-        <div className="tradingview-widget-container">
-          <div dangerouslySetInnerHTML={{
-            __html: `
-              <div class="tradingview-widget-container">
-                <div class="tradingview-widget-container__widget"></div>
-                <script type="text/javascript">
-                new TradingView.MediumWidget({
-                  "container_id": "tradingview-widget-container__widget",
-                  "symbols": [
-                    ["Bitcoin", "BINANCE:BTCUSDT|1D"],
-                    ["Ethereum", "BINANCE:ETHUSDT|1D"],
-                    ["Solana", "BINANCE:SOLUSDT|1D"],
-                    ["Sign", "BINANCE:SIGNUSDT|1D"],
-                    ["TON", "BINANCE:TONUSDT|1D"]
-                  ],
-                  "chartOnly": false,
-                  "width": "100%",
-                  "height": 400,
-                  "locale": "en",
-                  "colorTheme": "dark",
-                  "autosize": true,
-                  "showVolume": true,
-                  "hideDateRanges": false,
-                  "scalePosition": "right",
-                  "scaleMode": "Normal",
-                  "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
-                  "fontSize": "12",
-                  "noTimeScale": false,
-                  "valuesTracking": "1",
-                  "chartType": "line",
-                  "container_id": "tradingview-widget-container__widget"
-                });
-                </script>
-              </div>
-            `
-          }} />
-        </div>
-
-        {/* Additional Mini Ticker */}
-        <div className="mt-4">
-          <div dangerouslySetInnerHTML={{
-            __html: `
-              <div class="tradingview-widget-container">
-                <div class="tradingview-widget-container__widget"></div>
-                <script type="text/javascript">
-                new TradingView.MiniWidget({
-                  "symbol": "BINANCE:BTCUSDT",
-                  "width": "100%",
-                  "height": 150,
-                  "locale": "en",
-                  "dateRange": "1D",
-                  "colorTheme": "dark",
-                  "trendLineColor": "#37a6ef",
-                  "underLineColor": "#5c7080",
-                  "isTransparent": true,
-                  "autosize": true,
-                  "largeChartUrl": ""
-                });
-                </script>
-              </div>
-            `
-          }} />
-        </div>
+        <div dangerouslySetInnerHTML={{
+          __html: `
+            <script src="https://widgets.coingecko.com/gecko-coin-list-widget.js"></script>
+            <gecko-coin-list-widget locale="en" dark-mode="true" outlined="true" coin-ids="sign-global,the-open-network,bitcoin,ethereum,tether,solana" initial-currency="usd"></gecko-coin-list-widget>
+          `
+        }} />
       </div>
     </div>
   );
