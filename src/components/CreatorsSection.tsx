@@ -79,6 +79,46 @@ const CreatorsSection = () => {
       artworks: [
         '/lovable-uploads/392c2708-17e5-4a5e-8d7d-b3040c339e37.png'
       ]
+    },
+    {
+      username: 'lucky_of_web3',
+      displayName: 'Lucky | Web3',
+      bio: 'Web3 enthusiast. Sharing insights and updates. Connect with me on X!',
+      avatar: 'https://unavatar.io/twitter/lucky_of_web3',
+      url: 'https://x.com/lucky_of_web3?s=21',
+      artworks: [],
+      tweets: [
+        'https://x.com/lucky_of_web3/status/1922757287334064140?s=46',
+        'https://x.com/lucky_of_web3/status/1919384486115975373?s=46',
+        'https://x.com/lucky_of_web3/status/1922245416722055623?s=46'
+      ]
+    },
+    {
+      username: 'tajudeen_10',
+      displayName: 'Tajudeen 🔶',
+      bio: 'KING of @sign | Building the @ethsign Dynasty 🧡👀',
+      avatar: 'https://unavatar.io/twitter/tajudeen_10',
+      url: 'https://x.com/tajudeen_10?s=21',
+      artworks: [
+        '/lovable-uploads/taj1.mp4',
+        '/lovable-uploads/taj2.mp4'
+      ],
+      hasVideo: true,
+      tweets: [
+        'https://x.com/tajudeen_10/status/1929589023464378665?s=46'
+      ]
+    },
+    {
+      username: 'wavee_ton',
+      displayName: 'Wavee.ton💎🧡🦺',
+      bio: '$TON Ecosystem Researcher | Contributor @sign & @ethsign lover🧡🦺 | @SoarFunToken affiliate | DM for collabs & thread writing opportunities',
+      avatar: 'https://unavatar.io/twitter/wavee_ton',
+      url: 'https://x.com/wavee_ton?s=21',
+      artworks: [
+        '/lovable-uploads/wave1.mp4',
+        '/lovable-uploads/wave2.mp4'
+      ],
+      hasVideo: true
     }
   ];
 
@@ -163,6 +203,27 @@ const CreatorsSection = () => {
                       </div>
                     );
                   })}
+                </div>
+              </div>
+            )}
+
+            {/* Tweets (for lucky_of_web3) */}
+            {creator.username === 'lucky_of_web3' && creator.tweets && (
+              <div className="space-y-4 mt-4">
+                <h4 className="font-semibold text-crypto-purple">Featured Tweets</h4>
+                <div className="flex flex-col gap-4">
+                  {creator.tweets.map((tweetUrl, tweetIdx) => (
+                    <div key={tweetIdx} className="rounded-lg overflow-hidden border border-crypto-purple/20 bg-white dark:bg-black/30 shadow">
+                      <a href={tweetUrl} target="_blank" rel="noopener noreferrer" className="block hover:opacity-80 transition-opacity">
+                        <iframe
+                          src={`https://twitframe.com/show?url=${encodeURIComponent(tweetUrl)}`}
+                          style={{ width: '100%', minHeight: 400, border: 'none' }}
+                          allowFullScreen={false}
+                          title={`Tweet by lucky_of_web3 #${tweetIdx}`}
+                        />
+                      </a>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

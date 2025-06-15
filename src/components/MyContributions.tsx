@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ExternalLink, Award, Users, Zap, X } from 'lucide-react';
+import { ExternalLink, Award, Users, Zap, X, Play } from 'lucide-react';
 import ClickableImage from './ClickableImage';
 
 interface MediaOverlayProps {
@@ -60,8 +60,11 @@ const MyContributions = () => {
   const myArtworks = [
     '/lovable-uploads/632106d3-88da-4767-8bcb-3cd1f96417c9.png',
     '/lovable-uploads/f71569a6-7b28-42df-a640-1d080713aed6.png',
-    '/lovable-uploads/5fbf2bd6-f845-4508-825d-2cd8630ddc82.png'
+    '/lovable-uploads/5fbf2bd6-f845-4508-825d-2cd8630ddc82.png',
+    '/lovable-uploads/emlord1.mp4',
+    '/lovable-uploads/em1.jpg'
   ];
+
 
   return (
     <div className="space-y-8">
@@ -123,24 +126,33 @@ const MyContributions = () => {
         <div className="space-y-6">
           <h4 className="font-semibold text-crypto-purple text-lg">Featured Works</h4>
           <div className="grid grid-cols-2 gap-4">
-            {myArtworks.map((artwork, index) => (
-              <div 
-                key={index} 
-                className="relative group overflow-hidden rounded-lg cursor-pointer"
-                onClick={() => setSelectedMedia({ src: artwork })}
-              >
-                <img
-                  src={artwork}
-                  alt={`My contribution ${index + 1}`}
-                  className="w-full h-40 object-cover transition-transform group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="absolute bottom-3 left-3 text-white text-sm font-medium">
-                    Project {index + 1}
+            {myArtworks.map((artwork, index) => {
+              const isVideo = artwork.endsWith('.mp4');
+              return (
+                <div 
+                  key={index} 
+                  className="relative group overflow-hidden rounded-lg cursor-pointer"
+                  onClick={() => setSelectedMedia({ src: artwork, isVideo })}
+                >
+                  {isVideo ? (
+                    <div className="w-full h-40 flex items-center justify-center bg-gradient-to-br from-crypto-purple to-crypto-blue">
+                      <Play size={32} className="text-white" />
+                    </div>
+                  ) : (
+                    <img
+                      src={artwork}
+                      alt={`My contribution ${index + 1}`}
+                      className="w-full h-40 object-cover transition-transform group-hover:scale-110"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute bottom-3 left-3 text-white text-sm font-medium">
+                      Project {index + 1}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

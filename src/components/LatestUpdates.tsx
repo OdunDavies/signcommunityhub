@@ -12,23 +12,24 @@ const LatestUpdates = () => {
     script.defer = true;
     document.head.appendChild(script);
 
-    // Create and append the CoinGecko widget script
-    const coingeckoScript = document.createElement('script');
-    coingeckoScript.src = "https://widgets.coingecko.com/coingecko-coin-ticker-widget.js";
-    coingeckoScript.async = true;
-    coingeckoScript.onload = () => setIsWidgetLoaded(true);
-    document.head.appendChild(coingeckoScript);
+    // Create and append the TradingView widget script
+    const tradingViewScript = document.createElement('script');
+    tradingViewScript.src = "https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js";
+    tradingViewScript.type = "text/javascript";
+    tradingViewScript.async = true;
+    tradingViewScript.onload = () => setIsWidgetLoaded(true);
+    document.head.appendChild(tradingViewScript);
 
     // Cleanup function to remove scripts when component unmounts
     return () => {
       const existingJuicerScript = document.querySelector('script[src="https://www.juicer.io/embed/sign/embed-code.js"]');
-      const existingCoingeckoScript = document.querySelector('script[src="https://widgets.coingecko.com/coingecko-coin-ticker-widget.js"]');
+      const existingTradingViewScript = document.querySelector('script[src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js"]');
       
       if (existingJuicerScript) {
         document.head.removeChild(existingJuicerScript);
       }
-      if (existingCoingeckoScript) {
-        document.head.removeChild(existingCoingeckoScript);
+      if (existingTradingViewScript) {
+        document.head.removeChild(existingTradingViewScript);
       }
     };
   }, []);
@@ -52,54 +53,71 @@ const LatestUpdates = () => {
         <h3 className="text-lg font-semibold mb-4 crypto-gradient bg-clip-text text-transparent">
           Live Crypto Prices
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {!isWidgetLoaded && (
-            <div className="col-span-full text-center py-4 text-muted-foreground">
-              Loading crypto prices...
-            </div>
-          )}
+        {!isWidgetLoaded && (
+          <div className="text-center py-4 text-muted-foreground">
+            Loading crypto prices...
+          </div>
+        )}
+        <div className="tradingview-widget-container">
           <div dangerouslySetInnerHTML={{
             __html: `
-              <coingecko-coin-ticker-widget 
-                coin-id="bitcoin" 
-                currency="usd" 
-                locale="en"
-                background-color="#1a1b1f"
-                font-color="#ffffff">
-              </coingecko-coin-ticker-widget>
+              <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <script type="text/javascript">
+                new TradingView.MediumWidget({
+                  "container_id": "tradingview-widget-container__widget",
+                  "symbols": [
+                    ["Bitcoin", "BINANCE:BTCUSDT|1D"],
+                    ["Ethereum", "BINANCE:ETHUSDT|1D"],
+                    ["Solana", "BINANCE:SOLUSDT|1D"],
+                    ["Sign", "BINANCE:SIGNUSDT|1D"],
+                    ["TON", "BINANCE:TONUSDT|1D"]
+                  ],
+                  "chartOnly": false,
+                  "width": "100%",
+                  "height": 400,
+                  "locale": "en",
+                  "colorTheme": "dark",
+                  "autosize": true,
+                  "showVolume": true,
+                  "hideDateRanges": false,
+                  "scalePosition": "right",
+                  "scaleMode": "Normal",
+                  "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
+                  "fontSize": "12",
+                  "noTimeScale": false,
+                  "valuesTracking": "1",
+                  "chartType": "line",
+                  "container_id": "tradingview-widget-container__widget"
+                });
+                </script>
+              </div>
             `
           }} />
+        </div>
+
+        {/* Additional Mini Ticker */}
+        <div className="mt-4">
           <div dangerouslySetInnerHTML={{
             __html: `
-              <coingecko-coin-ticker-widget 
-                coin-id="ethereum" 
-                currency="usd" 
-                locale="en"
-                background-color="#1a1b1f"
-                font-color="#ffffff">
-              </coingecko-coin-ticker-widget>
-            `
-          }} />
-          <div dangerouslySetInnerHTML={{
-            __html: `
-              <coingecko-coin-ticker-widget 
-                coin-id="solana" 
-                currency="usd" 
-                locale="en"
-                background-color="#1a1b1f"
-                font-color="#ffffff">
-              </coingecko-coin-ticker-widget>
-            `
-          }} />
-          <div dangerouslySetInnerHTML={{
-            __html: `
-              <coingecko-coin-ticker-widget 
-                coin-id="sign" 
-                currency="usd" 
-                locale="en"
-                background-color="#1a1b1f"
-                font-color="#ffffff">
-              </coingecko-coin-ticker-widget>
+              <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <script type="text/javascript">
+                new TradingView.MiniWidget({
+                  "symbol": "BINANCE:BTCUSDT",
+                  "width": "100%",
+                  "height": 150,
+                  "locale": "en",
+                  "dateRange": "1D",
+                  "colorTheme": "dark",
+                  "trendLineColor": "#37a6ef",
+                  "underLineColor": "#5c7080",
+                  "isTransparent": true,
+                  "autosize": true,
+                  "largeChartUrl": ""
+                });
+                </script>
+              </div>
             `
           }} />
         </div>
