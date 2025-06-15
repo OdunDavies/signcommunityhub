@@ -89,8 +89,8 @@ const CreatorsSection = () => {
       artworks: [],
       tweets: [
         'https://x.com/lucky_of_web3/status/1922757287334064140?s=46',
-        'https://x.com/lucky_of_web3/status/1919384486115975373?s=46',
-        'https://x.com/lucky_of_web3/status/1922245416722055623?s=46'
+        'https://x.com/lucky_of_web3/status/1922245416722055623?s=46',
+        'https://x.com/lucky_of_web3/status/1919384486115975373?s=46'
       ]
     },
     {
@@ -214,14 +214,14 @@ const CreatorsSection = () => {
                 <div className="flex flex-col gap-4">
                   {creator.tweets.map((tweetUrl, tweetIdx) => (
                     <div key={tweetIdx} className="rounded-lg overflow-hidden border border-crypto-purple/20 bg-white dark:bg-black/30 shadow">
-                      <a href={tweetUrl} target="_blank" rel="noopener noreferrer" className="block hover:opacity-80 transition-opacity">
-                        <iframe
-                          src={`https://twitframe.com/show?url=${encodeURIComponent(tweetUrl)}`}
-                          style={{ width: '100%', minHeight: 400, border: 'none' }}
-                          allowFullScreen={false}
-                          title={`Tweet by lucky_of_web3 #${tweetIdx}`}
-                        />
-                      </a>
+                      <div dangerouslySetInnerHTML={{
+                        __html: `
+                          <blockquote class="twitter-tweet" data-lang="en">
+                            <a href="${tweetUrl}"></a>
+                          </blockquote>
+                          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                        `
+                      }} />
                     </div>
                   ))}
                 </div>
