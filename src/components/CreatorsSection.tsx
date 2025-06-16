@@ -8,6 +8,47 @@ interface MediaOverlayProps {
   onClose: () => void;
 }
 
+declare global {
+  interface Window {
+    twttr?: any;
+  }
+}
+
+const FeaturedTweets = ({ creator }) => {
+  useEffect(() => {
+    // Ensure Twitter script is loaded
+    if (window.twttr?.widgets) {
+      window.twttr.widgets.load();
+    }
+  }, [creator.tweets])
+
+  return (
+    creator.tweets && creator.tweets.length > 0 && (
+      <div className="space-y-4 mt-4">
+        <h4 className="font-semibold text-crypto-purple">Featured Tweets</h4>
+        <div className="flex flex-col gap-4">
+          {creator.tweets.map((tweetUrl, tweetIdx) => (
+            <div key={tweetIdx} className="rounded-lg overflow-hidden border border-crypto-purple/20 bg-white dark:bg-black/30 shadow">
+              <div className="p-4">
+                <div dangerouslySetInnerHTML={{
+                  __html: `
+                    <blockquote class="twitter-tweet" data-lang="en" data-theme="dark">
+                      <a href="${tweetUrl}"></a>
+                    </blockquote>
+                  `
+                }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  );
+};
+
+
+
+
 const MediaOverlay: React.FC<MediaOverlayProps> = ({ src, isVideo, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
@@ -32,14 +73,12 @@ const MediaOverlay: React.FC<MediaOverlayProps> = ({ src, isVideo, onClose }) =>
 
 const CreatorsSection = () => {
   const [selectedMedia, setSelectedMedia] = useState<{ src: string; isVideo?: boolean } | null>(null);
-  const [isTwitterScriptLoaded, setIsTwitterScriptLoaded] = useState(false);
 
   useEffect(() => {
     // Load Twitter widget script
     const script = document.createElement('script');
     script.src = 'https://platform.twitter.com/widgets.js';
     script.async = true;
-    script.onload = () => setIsTwitterScriptLoaded(true);
     document.body.appendChild(script);
 
     return () => {
@@ -105,10 +144,9 @@ const CreatorsSection = () => {
       url: 'https://x.com/lucky_of_web3?s=21',
       artworks: [],
       tweets: [
-        'https://x.com/lucky_of_web3/status/1919384486115975373?s=46',
         'https://x.com/lucky_of_web3/status/1922245416722055623?s=46',
-        'https://x.com/lucky_of_web3/status/1922757287334064140?s=46',
       ]
+      
     },
     {
       username: 'tajudeen_10',
@@ -121,9 +159,6 @@ const CreatorsSection = () => {
         '/lovable-uploads/taj2.mp4'
       ],
       hasVideo: true,
-      tweets: [
-        'https://x.com/tajudeen_10/status/1929589023464378665?s=46'
-      ]
     },
     {
       username: 'wavee_ton',
@@ -225,6 +260,7 @@ const CreatorsSection = () => {
             )}
 
             {/* Tweets Section */}
+            
             {creator.tweets && creator.tweets.length > 0 && (
               <div className="space-y-4 mt-4">
                 <h4 className="font-semibold text-crypto-purple">Featured Tweets</h4>
@@ -232,20 +268,12 @@ const CreatorsSection = () => {
                   {creator.tweets.map((tweetUrl, tweetIdx) => (
                     <div key={tweetIdx} className="rounded-lg overflow-hidden border border-crypto-purple/20 bg-white dark:bg-black/30 shadow">
                       <div className="p-4">
-                        <a 
-                          href={tweetUrl} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="block hover:opacity-80 transition-opacity"
-                        >
-                          <div dangerouslySetInnerHTML={{
-                            __html: `
-                              <blockquote class="twitter-tweet" data-lang="en">
-                                <a href="${tweetUrl}"></a>
-                              </blockquote>
-                            `
-                          }} />
-                        </a>
+                        <div dangerouslySetInnerHTML={{
+                          __html: `
+                            <blockquote class="twitter-tweet" data-dnt="true" align="center"><p lang="en" dir="ltr">🚨🔥SIGN NICKNAME <br><br>The sign intern dropped some bullish Alpha on a Sign space some days ago about the sign super App and I will be sharing one major thing I heard in the space which is;<br><br>The SIGN super will be based on &quot;Attestation&quot; not &quot;referral link&quot; which means there is going… <a href="https://t.co/npkjuM2tze">pic.twitter.com/npkjuM2tze</a></p>&mdash; Lucky Esemuede🧑‍🌾 (@Lucky_of_Web3) <a href="https://twitter.com/Lucky_of_Web3/status/1922245416722055623?ref_src=twsrc%5Etfw">May 13, 2025</a></blockquote>
+                            <blockquote class="twitter-tweet" data-dnt="true" align="center"><p lang="en" dir="ltr">🚨 SIGN IS THE NEW META<br><br>Before I dive into the New Meta SIGN is building in this space, I will quickly share some burning questions of signees.<br><br>I have seen some few signees asked me what SIGN is, but what I explained to them sound so strange to their ears why because;<br><br>To them:… <a href="https://t.co/NasJfacknG">pic.twitter.com/NasJfacknG</a></p>&mdash; Lucky Esemuede🧑‍🌾 (@Lucky_of_Web3) <a href="https://twitter.com/Lucky_of_Web3/status/1922757287334064140?ref_src=twsrc%5Etfw">May 14, 2025</a></blockquote>
+                            <blockquote class="twitter-tweet" data-dnt="true" align="center"><p lang="en" dir="ltr">🔥🚨 BUILD ON SIGN <br><br>A lot of people have been asking me question on how they can build on SIGN and become part of the movement.<br><br>Firstly you must understand that <a href="https://twitter.com/sign?ref_src=twsrc%5Etfw">@sign</a> is not farmable which simply means you don&#39;t perform tasks or play any game to earn points.<a href="https://twitter.com/search?q=%24SIGN&amp;src=ctag&amp;ref_src=twsrc%5Etfw">$SIGN</a> choose to… <a href="https://t.co/8j8sdwNGNF">pic.twitter.com/8j8sdwNGNF</a></p>&mdash; Lucky Esemuede🧑‍🌾 (@Lucky_of_Web3) <a href="https://twitter.com/Lucky_of_Web3/status/1919384486115975373?ref_src=twsrc%5Etfw">May 5, 2025</a></blockquote>
+                            `}} />
                       </div>
                     </div>
                   ))}
@@ -280,3 +308,4 @@ const CreatorsSection = () => {
 };
 
 export default CreatorsSection;
+

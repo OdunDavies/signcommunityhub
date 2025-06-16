@@ -7,7 +7,7 @@ const LatestUpdates = () => {
     // Create and append the Juicer script
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = 'https://www.juicer.io/embed/sign/embed-code.js';
+    script.src = 'https://www.juicer.io/embed/sign-8693add7-9e5e-47b7-a29b-325a2d93fa4e/embed-code.js';
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
